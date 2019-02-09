@@ -7,7 +7,9 @@ import Client.src.backend.GlobalVars as GlobalVars
 
 gui_dir = os.path.join(os.getcwd(), "gui")  # development path
 if not os.path.exists(gui_dir):  # frozen executable path
-    gui_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "gui")
+    gui_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "gui")
+
+print
 
 client = Flask(__name__, static_folder=gui_dir, template_folder=gui_dir)
 client.config["SEND_FILE_MAX_AGE_DEFAULT"] = 1  # disable caching
