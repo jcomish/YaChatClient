@@ -1001,10 +1001,7 @@ function hideModal() {
 
 
 $(document).ready(function() {
-	$('#settings_submit').on('click', function(e) {
-		e.preventDefault();
-		e.stopPropagation();
-
+	$('#settings_submit').one('click', function(e) {
 
         var name = $('#name').val();
         var host = $('#host').val();
@@ -1041,7 +1038,7 @@ $(document).ready(function() {
 
 
 
-    $('#exit_room').on('click', function() {
+    $('#exit_room').one('click', function() {
         req = $.ajax({
             url : '/exit_room',
             type : 'POST',
