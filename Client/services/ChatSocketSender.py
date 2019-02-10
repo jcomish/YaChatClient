@@ -33,15 +33,17 @@ class ChatSocketSender(ChatSocket):
         message = "MESG " + self.screen_name + ": " + message + "\n"
         for name in self.hosts:
             if name.lower != self.screen_name.lower(): # We don't want to send the message to ourselves.
-                self.send_msg_over_udp(message, self.hosts[name], self.chat_port)
-                GlobalVars.LOGGER.debug("(" + str(datetime.now()) + ") SENT MESSAGE: " + message)
+                self.send_msg_over_udp(message, self.hosts[name][0], self.hosts[name][1])
+                GlobalVars.LOGGER.debug("(" + str(datetime.now()) + ") SENT MESSAGE (" + name + "): " + message)
 
     def exit_chatroom(self):
         """
         Exits the Chatroom, telling the Membership server that it is done.
         :return: None
         """
+        del self.hosts[self.screen_name]
         self.send_msg_over_tcp("EXIT\n")
+        # GlobalVars.LOGGER.ChatSocketListener
         GlobalVars.LOGGER.debug("(" + str(datetime.now()) + ") SENT EXIT MESSAGE")
 
     def parse_users(self, msg: str):
@@ -55,7 +57,7 @@ class ChatSocketSender(ChatSocket):
         temp_dict = {}
         for user in msg:
             data = user.split(" ")
-            temp_dict[data[0]] = (data[1])
+            temp_dict[data[0]] = (data[1], data[2])
         return temp_dict
 
     def connect_to_membership_server(self, name, host, port, chat_port):
@@ -75,7 +77,7 @@ class ChatSocketSender(ChatSocket):
             self.chat_port = str(chat_port)
 
             GlobalVars.LOGGER.debug("(" + str(datetime.now()) + ")" + " ATTEMPTING CONNECTION TO " +
-                                    self.host_port + " " + self.host_port)
+                                    self.host_ip + " " + self.host_port)
 
             self.establish_tcp_socket()
             self.send_msg_over_tcp("HELO " + self.screen_name + " " + self.host_ip + " " + self.chat_port + "\n")
@@ -86,7 +88,7 @@ class ChatSocketSender(ChatSocket):
                 users = self.parse_users(str(msg[5:-1]).split(":"))
             elif msg[:4] == "RJCT":
                 GlobalVars.LOGGER.debug("(" + str(datetime.now()) + ") SCREEN NAME ALREADY EXISTS! REJECTED")
-                return False
+                return "Screen name taken!"
 
             self.hosts = {**self.hosts, **users}
 
@@ -100,4 +102,4 @@ class ChatSocketSender(ChatSocket):
                                     self.own_ip + " " + self.chat_port)
             return users
         except:
-            return False
+            return "Failed to find server!"

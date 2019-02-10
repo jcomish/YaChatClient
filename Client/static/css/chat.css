@@ -544,6 +544,8 @@ body {
   max-height: calc(100% - 93px);
   overflow-y: scroll;
   overflow-x: hidden;
+  padding-top:10px;
+  padding-bottom:15px;
 }
 @media screen and (max-width: 735px) {
   #frame .content .messages {
@@ -707,6 +709,7 @@ body {
 .alerts {
   position: relative;
   visibility: block;
+  display: none;
 }
 
 body {
@@ -733,6 +736,12 @@ pre {
  color:grey;
  padding-right: 50px;
  text-align: right;
+}
+
+.subtext-center {
+ font-size: 10px;
+ color:grey;
+ text-align: center;
 }
 
 .timestamp {

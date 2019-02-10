@@ -17,16 +17,15 @@
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/chat.css')}}">
     </head>
 <body>
-<!-- Credit to Emil Carlsson for UI components -->
 
 <div id="frame">
 	<div id="sidepanel">
 		<div id="profile">
 			<div class="wrap">
-				<img id="profile-img" src="{{ url_for('static', filename='img/person.png')}}" class="online" alt="" />
+				<img id="profile-img" src="" class="online" alt="" />
 				<p id="screen_name">Anonymous</p>
-				<!--<i class="fa fa-chevron-down expand-button" aria-hidden="true"></i>-->
-				<!--<div id="status-options">-->
+				<!--{{ url_for('static', filename='img/person.png')}}<i class="fa fa-chevron-down expand-button" aria-hidden="true"></i>-->
+				<!--document.getElementById("screen_name")<div id="status-options">-->
 					<!--<ul>-->
 						<!--<li id="status-online" class="active"><span class="status-circle"></span> <p>Online</p></li>-->
 						<!--<li id="status-away"><span class="status-circle"></span> <p>Away</p></li>-->
@@ -67,17 +66,20 @@
             <div id="success_connection_message" class="alert alert-success alerts" role="alert">
                 Successfully connected!
             </div>
-            <div id="fail_connection_message" class="alert alert-danger alerts" role="alert">
+            <div id="fail_connection_message_screen_name" class="alert alert-danger alerts" role="alert">
                 Failed to connect! Change your username.
             </div>
 			<div id="fail_connection_message_bad_server" class="alert alert-danger alerts" role="alert">
-                Failed to connect! Could not connect to the given server
+                Failed to connect! Check your Server data.
             </div>
             <div id="success_disconnection_message" class="alert alert-success alerts" role="alert">
                 Successfully disconnected!
             </div>
 			<div id="fail_disconnection_message" class="alert alert-danger alerts" role="alert">
                 Failed to disconnect!
+            </div>
+            <div id="existing_connection_error" class="alert alert-danger alerts" role="alert">
+                Failed to establish connection... You already have one open!
             </div>
 
 			<!--<button id="addcontact"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> <span>Add contact</span></button>-->
@@ -103,9 +105,9 @@
 		</div>
 		<div class="message-input">
 			<div class="wrap">
-			<input type="text" placeholder="Write your message..." />
+			<input id="message_input" type="text" placeholder="Write your message..." />
 			<i class="fa fa-paperclip attachment" aria-hidden="true"></i>
-			<button class="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+			<button id="send_message_button" class="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
 			</div>
 		</div>
 	</div>

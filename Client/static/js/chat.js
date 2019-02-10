@@ -1,5 +1,3 @@
-
-
 $(".messages").animate({ scrollTop: $(document).height() }, "fast");
 
 $("#profile-img").click(function() {
@@ -42,8 +40,6 @@ function newMessage() {
 	}
 
 	var today = new Date();
-
-
 	var date = (today.getMonth() + 1) +'/' + today.getDate() + '/' + today.getFullYear();
     var hours = today.getHours() + ":";
     var minutes = today.getMinutes();
@@ -68,7 +64,6 @@ function recvMessage(message) {
 	if($.trim(message.message) == '') {
 		return false;
 	}
-	console.log(message)
 	$('<li class="replies"><div><img src="' + LetterAvatar(String(message.user), 25) + '"><p>' + String(message.message) + '</p></li>' +
 	'<p class="subtext-right">' + String(message.user) +'</p>' +
 	'<p class="subtext-right">' + String(message.timestamp) + '</p>' +
@@ -78,14 +73,13 @@ function recvMessage(message) {
 	$(".messages").animate({ scrollTop: $(document).height() }, "fast");
 };
 
+function systemMessage(message) {
+    $('<div><p class="subtext-center">' + message +'</p></div>').appendTo($('.messages ul'));
+	$('.message-input input').val(null);
+	$('.contact.active .preview').html('<span>You: </span>' + message.message);
+	$(".messages").animate({ scrollTop: $(document).height() }, "fast");
+}
 
-/*
- * LetterAvatar
- *
- * Artur Heinze
- * Create Letter avatar based on Initials
- * based on https://gist.github.com/leecrossley/6027780
- */
 (function(w, d){
 
 
@@ -95,7 +89,7 @@ function recvMessage(message) {
         size  = size || 60;
 
         var colours = [
-                "#1abc9c", "#2ecc71", "#3498db", "#9b59b6", "#34495e", "#16a085", "#27ae60", "#2980b9", "#8e44ad", "#2c3e50",
+                "#1abc9c", "#2ecc71", "#3498db", "#9b59b6", "#34495e", "#16a085", "#27ae60", "#2980b9", "#8e44ad", "#2164a8",
                 "#f1c40f", "#e67e22", "#e74c3c", "#ecf0f1", "#95a5a6", "#f39c12", "#d35400", "#c0392b", "#bdc3c7", "#7f8c8d"
             ],
 
@@ -161,7 +155,6 @@ function recvMessage(message) {
         exports.LetterAvatar = LetterAvatar;
 
     } else {
-
         window.LetterAvatar = LetterAvatar;
 
         d.addEventListener('DOMContentLoaded', function(event) {
@@ -170,28 +163,6 @@ function recvMessage(message) {
     }
 
 })(window, document);
-
-
-
-$('.submit').click(function() {
-  newMessage();
-});
-
-$(window).on('keydown', function(e) {
-  if (e.which == 13) {
-    newMessage();
-    return false;
-  }
-});
-//# sourceURL=pen.js
-
-window.onload = function WindowLoad(event) {
-    hide(document.getElementById("success_connection_message"));
-    hide(document.getElementById("fail_connection_message"));
-    hide(document.getElementById("fail_connection_message_bad_server"));
-    hide(document.getElementById("success_disconnection_message"));
-    hide(document.getElementById("fail_disconnection_message"));
-}
 
 function setText(id,newvalue) {
   var s= document.getElementById(id);
@@ -217,9 +188,6 @@ function truncate(string){
       return string;
 }
 
-
-
-
 // Get the modal
 var modal = document.getElementById('myModal');
 
@@ -239,7 +207,6 @@ span.onclick = function() {
   modal.style.display = "none";
 }
 
-
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
   if (event.target == modal) {
@@ -256,8 +223,18 @@ $(document).ready(function() {
     // NOTE: This is only used for communication from already-recieved messages. All communications
     //       are still done in TCP and UDP sockets as foudn in ChatSocketListener and ChatSocketSender.
     var socket = io.connect('http://127.0.0.1:23946/chat_client');
+    document.getElementById("profile-img").setAttribute("src", LetterAvatar("Anonymous", 100));
 
 	$('#settings_submit').on('click', function(e) {
+
+//        var group_name = $('#group_name').innerHTML;
+//        var group_name = ctrl.getElementsByTagName('p')[0].innerHTML;
+        var group_name = document.getElementById("group_name").textContent;
+        console.log(group_name);
+        if (group_name != "Disconnected") {
+            $('#existing_connection_error').fadeIn(1000).fadeOut(5000);
+            return
+        }
 
         var name = $('#name').val();
         var host = $('#host').val();
@@ -267,12 +244,11 @@ $(document).ready(function() {
         req = $.ajax({
             url : '/connect_to_mms',
             type : 'POST',
-            data : { name : name, host : host, port : port, chat_port : chat_port }
+            data : { 'name' : name, 'host' : host, 'port' : port, 'chat_port' : chat_port }
         });
 
         req.done(function(data) {
             if (data.status == "Successfully connected!") {
-
                 $('#success_connection_message').fadeIn(1000).fadeOut(5000);
                 if (document.getElementById("people_in_group").value) {
                     var group_text = truncate(document.getElementById("chat_port").value + ", " +
@@ -286,20 +262,23 @@ $(document).ready(function() {
 
                 setText("group_name", truncate(data.group_name))
                 setText("screen_name", document.getElementById("name").value)
+                document.getElementById("profile-img").setAttribute("src", LetterAvatar(String(name), 100));
             }
             else {
-                $('#fail_connection_message').fadeIn(1000).fadeOut(5000);
+                if (data.status == "Failed to connect. Screen name already taken!") {
+                    $('#fail_connection_message_screen_name').fadeIn(1000).fadeOut(5000);
+                }
+                else {
+                    $('#fail_connection_message_bad_server').fadeIn(1000).fadeOut(5000);
+                }
             }
         });
     });
-
-
 
     $('#exit_room').on('click', function() {
         req = $.ajax({
             url : '/exit_room',
             type : 'POST',
-            <!--data : { name : name, host : host, port : port, chat_port : chat_port }-->
         });
 
         req.done(function(data) {
@@ -315,15 +294,45 @@ $(document).ready(function() {
         });
     });
 
-    socket.on('update_group_name', function(data) {
-        console.log("Recieved Message!");
+    function send_message_to_group() {
+         var message = $(".message-input input").val();
 
-        setText("group_name", truncate(data.group_name))
+        req = $.ajax({
+            url : '/send_message',
+            type : 'POST',
+            data: { 'message': message },
+        });
+
+        req.done(function(data) {
+            newMessage();
+            var element = document.getElementById("messages");
+            element.scrollTop = element.scrollHeight;
+        });
+    }
+
+    $(window).on('keydown', function(e) {
+      if (e.which == 13) {
+        send_message_to_group();
+      }
+    });
+
+    $('#send_message_button').on('click', send_message_to_group);
+
+    socket.on('update_group_name', function(data) {
+        if (data.group_name) {
+            setText("group_name", truncate(data.group_name));
+        }
+
+        if (data.isEnter) {
+            systemMessage(data.user + " has entered the room.");
+        }
+        else {
+            systemMessage(data.user + " has exited the room.");
+        }
+
     });
 
     socket.on('post_message', function(data) {
-        console.log("Recieved Message!");
-
-        recvMessage(data)
+        recvMessage(data);
     });
 });

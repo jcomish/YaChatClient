@@ -42,13 +42,22 @@ def exit_room():
         }
     except:
         response = {
-            "status": "Failed to  Disconnect!"
+            "status": "Failed to Disconnect!"
         }
     return jsonify(response)
 
 @client.route("/send_message", methods=["POST"])
 def send_message():
-    pass
+    GlobalVars.CHAT_SOCKET_SENDER.send_message_to_room(request.form.get("message"))
+    try:
+        response = {
+            "status": "Successfully sent message!"
+        }
+    except:
+        response = {
+            "status": "Failed to send message!"
+        }
+    return jsonify(response)
 
 @client.route("/connect_to_mms", methods=["POST"])
 def connect_to_mms():
@@ -60,21 +69,24 @@ def connect_to_mms():
                                                                        request.form.get("port"),
                                                                        request.form.get("chat_port"))
 
-    users = list(GlobalVars.CHAT_SOCKET_SENDER.hosts.keys())
-    users.remove(GlobalVars.CHAT_SOCKET_SENDER.screen_name)
-
-    if users:
+    if isinstance(users,dict):
+        users = list(GlobalVars.CHAT_SOCKET_SENDER.hosts.keys())
+        users.remove(GlobalVars.CHAT_SOCKET_SENDER.screen_name)
         response = {
             "status": "Successfully connected!",
             "name": GlobalVars.CHAT_SOCKET_SENDER.screen_name,
-            # "host_ip": request.form.get("host_ip"),
             "port": GlobalVars.CHAT_SOCKET_SENDER.chat_port,
             "group_name": GlobalVars.CHAT_SOCKET_SENDER.get_group_name()
         }
     else:
-        response = {
-            "status": "Failed to connect!"
-        }
+        if "Screen name" in users:
+            response = {
+                "status": "Failed to connect. Screen name already taken!"
+            }
+        else:
+            response = {
+                "status": "Failed to connect. Check your server information"
+            }
 
     return jsonify(response)
 

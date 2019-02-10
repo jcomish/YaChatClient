@@ -8,15 +8,9 @@ from http.client import HTTPConnection
 import Client.services.GlobalVars as GlobalVars
 
 server_lock = Lock()
-# logging.basicConfig(filename="test.log", level=logging.DEBUG)
-# logging.basicConfig(level=logging.DEBUG)
 GlobalVars.LOGGER = logging.getLogger(__name__)
 # GlobalVars.LOGGER.setLevel(logging.DEBUG)
 coloredlogs.install(level='DEBUG')
-
-# If you don't want to see log messages from libraries, you can pass a
-# specific logger object to the install() function. In this case only log
-# messages originating from that logger will show up on the terminal.
 coloredlogs.install(level='DEBUG', logger=GlobalVars.LOGGER)
 
 """
@@ -50,3 +44,5 @@ if __name__ == '__main__':
     webview.create_window("YaChat",
                           "http://127.0.0.1:23946",
                           min_size=(640, 480))
+
+#TODO: Fix the weird scrolling issue
