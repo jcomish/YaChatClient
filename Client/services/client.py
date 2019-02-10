@@ -2,20 +2,19 @@ import os
 from flask import Flask, render_template, jsonify, request
 import webview
 import webbrowser
-from Client.src.backend.ChatSocketSender import ChatSocketSender
-import Client.src.backend.GlobalVars as GlobalVars
+from Client.services.ChatSocketSender import ChatSocketSender
+import Client.services.GlobalVars as GlobalVars
+from flask_socketio import SocketIO
 
-gui_dir = os.path.join(os.getcwd(), "gui")  # development path
-if not os.path.exists(gui_dir):  # frozen executable path
-    gui_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "gui")
-
-client = Flask(__name__, static_folder=gui_dir, template_folder=gui_dir)
+client = Flask(__name__, static_folder=os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "static"),
+                         template_folder=os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "templates"))
 client.config["SEND_FILE_MAX_AGE_DEFAULT"] = 1  # disable caching
-
+GlobalVars.SOCKETIO = SocketIO(client)
 """
-Flask code to make the front end interact with the ChatSocketManager backend.
+Flask code to make the front end interact with the ChatSocketManager services.
 The initial code was pulled from the sample provided by the pywebview github repository
 """
+
 
 
 @client.after_request
@@ -47,19 +46,9 @@ def exit_room():
         }
     return jsonify(response)
 
-@client.route("/poll")
-def poll():
-    """[
-    Polls for any new information. This includes any updates to the membership of the room
-    as well as any new messages
-    """
-    #TODO: Read this info from the DB
-    response = {
-        "members": ["Not Yet Implemented"],
-        "messages": ["Not Yet Implemented"]
-    }
-    return jsonify(response)
-
+@client.route("/send_message", methods=["POST"])
+def send_message():
+    pass
 
 @client.route("/connect_to_mms", methods=["POST"])
 def connect_to_mms():
@@ -80,7 +69,7 @@ def connect_to_mms():
             "name": GlobalVars.CHAT_SOCKET_SENDER.screen_name,
             # "host_ip": request.form.get("host_ip"),
             "port": GlobalVars.CHAT_SOCKET_SENDER.chat_port,
-            "group_name": GlobalVars.CHAT_SOCKET_SENDER.chat_port + ": " + GlobalVars.CHAT_SOCKET_SENDER.screen_name + ", " + ", ".join(users)
+            "group_name": GlobalVars.CHAT_SOCKET_SENDER.get_group_name()
         }
     else:
         response = {

@@ -1,7 +1,8 @@
-from Client.src.backend.ChatSocket import ChatSocket
+from Client.services.ChatSocket import ChatSocket
 import threading
 import socket
-import Client.src.backend.GlobalVars as GlobalVars
+import Client.services.GlobalVars as GlobalVars
+from flask_socketio import emit
 from datetime import datetime
 
 
@@ -10,6 +11,7 @@ class ChatSocketListener(ChatSocket):
     This will be the servant thread, and will listen for any messages coming in from other users
     and the Membership Server.
     """
+
     def __init__(self, host_ip="127.0.0.1", host_port="27070"):
         self.host_ip = host_ip
         self.host_port = host_port
@@ -40,11 +42,17 @@ class ChatSocketListener(ChatSocket):
 
     def recieve_message_from_room(self, msg):
         sender = msg[0]
-        message = msg[1]
+        message = msg[1].lstrip()
         timestamp = datetime.now()
-        print("(" + sender + ") " + str(timestamp) + ": " + message)
-        GlobalVars.LOGGER.debug("(" + str(datetime.now()) + ") PROCESSED MESSAGE (" + sender + "): " + message)
-        #TODO: Write this to the DB
+
+        GlobalVars.LOGGER.debug("(" + str(timestamp) + ") PROCESSED MESSAGE (" + sender + "): " + message)
+
+        # Send the message to the front end.
+        GlobalVars.SOCKETIO.emit('post_message',
+                                 {'user': sender,
+                                  'message': message,
+                                  'timestamp': timestamp.strftime("%-m/%-d/%Y %H:%M")},
+                                 namespace='/chat_client')
 
 
     def user_joined_room(self, msg):
@@ -53,7 +61,12 @@ class ChatSocketListener(ChatSocket):
         GlobalVars.LOGGER.debug("(" + str(datetime.now()) + ") PROCESSED USER JOIN: " + next(iter(new_user)) +
                                 " AT IP: " + new_user[next(iter(new_user))])
 
-        GlobalVars.CHAT_SOCKET_SENDER.send_message_to_room("This is an automated message")
+        # Send the message to the front end.
+        GlobalVars.SOCKETIO.emit('update_group_name',
+                                 {'group_name': GlobalVars.CHAT_SOCKET_SENDER.get_group_name()},
+                                 namespace='/chat_client')
+
+        # GlobalVars.CHAT_SOCKET_SENDER.send_message_to_room("This is an automated message")
 
 
     def user_exited_room(self, msg):
@@ -63,3 +76,8 @@ class ChatSocketListener(ChatSocket):
         else:
             del GlobalVars.CHAT_SOCKET_SENDER.hosts[msg]
             GlobalVars.LOGGER.debug("(" + str(datetime.now()) + ") PROCESSED USER EXIT: " + msg)
+
+            # Send the message to the front end.
+            GlobalVars.SOCKETIO.emit('update_group_name',
+                                     {'group_name': GlobalVars.CHAT_SOCKET_SENDER.get_group_name()},
+                                     namespace='/chat_client')

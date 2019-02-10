@@ -1,22 +1,4 @@
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<!------ Include the above in your HEAD tag ---------->
-
-<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-<!------ Include the above in your HEAD tag ---------->
-
-
-<!DOCTYPE html><html class=''>
-<head><script src='//production-assets.codepen.io/assets/editor/live/console_runner-079c09a0e3b9ff743e39ee2d5637b9216b3545af0de366d4b9aad9dc87e26bfd.js'></script><script src='//production-assets.codepen.io/assets/editor/live/events_runner-73716630c22bbc8cff4bd0f07b135f00a0bdc5d14629260c3ec49e5606f98fdd.js'></script><script src='//production-assets.codepen.io/assets/editor/live/css_live_reload_init-2c0dc5167d60a5af3ee189d570b1835129687ea2a61bee3513dee3a50c115a77.js'></script><meta charset='UTF-8'><meta name="robots" content="noindex"><link rel="shortcut icon" type="image/x-icon" href="//production-assets.codepen.io/assets/favicon/favicon-8ea04875e70c4b0bb41da869e81236e54394d63638a1ef12fa558a4a835f1164.ico" /><link rel="mask-icon" type="" href="//production-assets.codepen.io/assets/favicon/logo-pin-f2d2b6d2c61838f7e76325261b7195c27224080bc099486ddd6dccb469b8e8e6.svg" color="#111" /><link rel="canonical" href="https://codepen.io/emilcarlsson/pen/ZOQZaV?limit=all&page=74&q=contact+" />
-<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,300' rel='stylesheet' type='text/css'>
-
-<script src="https://use.typekit.net/hoy3lrg.js"></script>
-<script>try{Typekit.load({ async: true });}catch(e){}</script>
-<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css'><link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css'>
-<style class="cp-pen-styles">body {
+body {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -726,340 +708,33 @@
   position: relative;
   visibility: block;
 }
-</style></head><body>
-<!--
-Credit to Emil Carlsson for UI components
--->
 
-<div id="frame">
-	<div id="sidepanel">
-		<div id="profile">
-			<div class="wrap">
-				<img id="profile-img" src="gui/static/person.png" class="online" alt="" />
-				<p id="screen_name">Anonymous</p>
-				<!--<i class="fa fa-chevron-down expand-button" aria-hidden="true"></i>-->
-				<!--<div id="status-options">-->
-					<!--<ul>-->
-						<!--<li id="status-online" class="active"><span class="status-circle"></span> <p>Online</p></li>-->
-						<!--<li id="status-away"><span class="status-circle"></span> <p>Away</p></li>-->
-						<!--<li id="status-busy"><span class="status-circle"></span> <p>Busy</p></li>-->
-						<!--<li id="status-offline"><span class="status-circle"></span> <p>Offline</p></li>-->
-					<!--</ul>-->
-				<!--</div>-->
-				<!--<div id="expanded">-->
-					<!--<label for="twitter"><i class="fa fa-facebook fa-fw" aria-hidden="true"></i></label>-->
-					<!--<input name="twitter" type="text" value="mikeross" />-->
-					<!--<label for="twitter"><i class="fa fa-twitter fa-fw" aria-hidden="true"></i></label>-->
-					<!--<input name="twitter" type="text" value="ross81" />-->
-					<!--<label for="twitter"><i class="fa fa-instagram fa-fw" aria-hidden="true"></i></label>-->
-					<!--<input name="twitter" type="text" value="mike.ross" />-->
-				<!--</div>-->
-			</div>
-		</div>
-		<!--<div id="search">-->
-			<!--<label for=""><i class="fa fa-search" aria-hidden="true"></i></label>-->
-			<!--<input type="text" placeholder="Search contacts..." />-->
-		<!--</div>-->
-		<div id="contacts">
-			<ul>
-				<!--<li class="contact">-->
-					<!--<div class="wrap">-->
-						<!--<span class="contact-status online"></span>-->
-						<!--<img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />-->
-						<!--<div class="meta">-->
-							<!--<p class="name">Louis Litt</p>-->
-							<!--<p class="preview">Hey!</p>-->
-						<!--</div>-->
-					<!--</div>-->
-				<!--</li>-->
-
-			</ul>
-		</div>
-		<div id="bottom-bar">
-            <div id="success_connection_message" class="alert alert-success alerts" role="alert">
-                Successfully connected!
-            </div>
-            <div id="fail_connection_message" class="alert alert-danger alerts" role="alert">
-                Failed to connect! Change your username.
-            </div>
-			<div id="fail_connection_message_bad_server" class="alert alert-danger alerts" role="alert">
-                Failed to connect! Could not connect to the given server
-            </div>
-            <div id="success_disconnection_message" class="alert alert-danger alerts" role="alert">
-                Successfully disconnected!
-            </div>
-			<div id="fail_disconnection_message" class="alert alert-danger alerts" role="alert">
-                Failed to disconnect!
-            </div>
-
-			<!--<button id="addcontact"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> <span>Add contact</span></button>-->
-			<!--<button id="settings"><i class="fa fa-cog fa-fw" aria-hidden="true" ></i> <span>Settings</span></button>-->
-			<button id="exit_room"><i class="glyphicon glyphicon-share"></i> <span>Exit Room</span></button>
-            <button id="settings" data-toggle="modal" data-target="#basicExampleModal"><i class="glyphicon glyphicon-cog"></i> <span>Settings</span></button>
-		</div>
-	</div>
-	<div class="content">
-		<div class="contact-profile">
-			<img src="gui/static/group.png" alt="" /> <!-- NOTE: Update this to be a different image-->
-			<p id="group_name">Disconnected</p> <!-- NOTE: Update this to state the ip and port number-->
-			<!--<div class="social-media">-->
-				<!--<i class="fa fa-facebook" aria-hidden="true"></i>-->
-				<!--<i class="fa fa-twitter" aria-hidden="true"></i>-->
-				 <!--<i class="fa fa-instagram" aria-hidden="true"></i>-->
-			<!--</div>-->
-		</div>
-		<div id="messages" class="messages">
-			<ul>
-
-			</ul>
-		</div>
-		<div class="message-input">
-			<div class="wrap">
-			<input type="text" placeholder="Write your message..." />
-			<i class="fa fa-paperclip attachment" aria-hidden="true"></i>
-			<button class="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
-			</div>
-		</div>
-	</div>
-
-    <div id="myModal" class="modal">
-
-        <!-- Modal content -->
-        <div class="modal-content">
-            <!--<form method="post" id="settings_modal" action="connect_to_mms">-->
-                <span class="close">&times;</span>
-                <h1>Settings</h1><br/>
-                <label>Name: </label><input type="text" id="name" name="name" placeholder="User Name" value="Josh"><br/>
-                <label>Host IP: </label><input type="text" id="host"  name="host" value="127.0.0.1"><br/>
-                <label>Server Port: </label><input type="text" id="port" name="port" value="7575"><br/>
-                <label>Chat Port: </label><input type="text" id="chat_port" name="chat_port" value="50123"><br/>
-                <button id="settings_submit" name="settings_submit" onclick="hideModal()" type="button" class="btn btn-primary">Submit</button>
-            <!--</form>-->
-        </div>
-    </div>
-
-    <div id="variables">
-        <p id="people_in_group"> </p>
-    </div>
-</div>
-<script src='//production-assets.codepen.io/assets/common/stopExecutionOnTimeout-b2a7b3fe212eaa732349046d8416e00a9dec26eb7fd347590fbced3ab38af52e.js'></script><script src='https://code.jquery.com/jquery-2.2.4.min.js'></script>
-<script >$(".messages").animate({ scrollTop: $(document).height() }, "fast");
-
-<!--$("#profile-img").click(function() {-->
-	<!--$("#status-options").toggleClass("active");-->
-<!--});-->
-
-<!--$(".expand-button").click(function() {-->
-  <!--$("#profile").toggleClass("expanded");-->
-	<!--$("#contacts").toggleClass("expanded");-->
-<!--});-->
-
-<!--$("#status-options ul li").click(function() {-->
-	<!--$("#profile-img").removeClass();-->
-	<!--$("#status-online").removeClass("active");-->
-	<!--$("#status-away").removeClass("active");-->
-	<!--$("#status-busy").removeClass("active");-->
-	<!--$("#status-offline").removeClass("active");-->
-	<!--$(this).addClass("active");-->
-
-	<!--if($("#status-online").hasClass("active")) {-->
-		<!--$("#profile-img").addClass("online");-->
-	<!--} else if ($("#status-away").hasClass("active")) {-->
-		<!--$("#profile-img").addClass("away");-->
-	<!--} else if ($("#status-busy").hasClass("active")) {-->
-		<!--$("#profile-img").addClass("busy");-->
-	<!--} else if ($("#status-offline").hasClass("active")) {-->
-		<!--$("#profile-img").addClass("offline");-->
-	<!--} else {-->
-		<!--$("#profile-img").removeClass();-->
-	<!--};-->
-
-	<!--$("#status-options").removeClass("active");-->
-<!--});-->
-
-//NOTE: Update this to send a message to everyone else in the chat room using a backend function.
-function newMessage() {
-	message = $(".message-input input").val();
-	if($.trim(message) == '') {
-		return false;
-	}
-	$('<li class="sent"><img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p>' + message + '</p></li>').appendTo($('.messages ul'));
-	$('.message-input input').val(null);
-	$('.contact.active .preview').html('<span>You: </span>' + message);
-	$(".messages").animate({ scrollTop: $(document).height() }, "fast");
-};
-
-$('.submit').click(function() {
-  newMessage();
-});
-
-$(window).on('keydown', function(e) {
-  if (e.which == 13) {
-    newMessage();
-    return false;
-  }
-});
-//# sourceURL=pen.js
-
-
-
-
-// Need to make a polling function that will check the status of the connection.
-// Requirements:
-//   - Poll every 1 second
-//   - Only poll if connection_establishing is true
-//   - Check the database if Port number is available on the room
-//     - If it is
-//       - Display a green banner saying that the connection was successfully established
-//       - Update the Chat Room name with the ip and host name
-//     - If the Port is "FAILED"
-//       - Display a red banner saying that the connection failed
-//       - Do not update the chat room name
-
-window.onload = function WindowLoad(event) {
-    hide(document.getElementById("success_connection_message"));
-    hide(document.getElementById("fail_connection_message"));
-    hide(document.getElementById("fail_connection_message_bad_server"));
-    hide(document.getElementById("success_disconnection_message"));
-    hide(document.getElementById("fail_disconnection_message"));
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-<!--window.setInterval(function(){-->
-  <!--masterPoll()-->
-<!--}, 1000);-->
-
-function setText(id,newvalue) {
-  var s= document.getElementById(id);
-  s.innerHTML = newvalue;
+pre {
+  margin: 20px 0;
+  padding: 20px;
+  background: #fafafa;
 }
 
-// Show an element
-var show = function (elem) {
-	elem.style.display = 'block';
-};
+.round { border-radius: 50%; }
 
-// Hide an element
-var hide = function (elem) {
-	elem.style.display = 'none';
-};
-
-function masterPoll() {
-    var group_text = truncate(document.getElementById("chat_port").value + ", "
-                              + document.getElementById("people_in_group").value)
-    setText("group_name", group_text)
-    setText("screen_name", document.getElementById("name").value)
+.subtext-left {
+ font-size: 10px;
+ color:grey;
+ padding-left: 50px;
+ text-align: left;
 }
 
-function truncate(string){
-   var number_of_chars = (Math.round(Number(document.getElementById("messages").clientWidth) / 11));
-
-   if (string.length > number_of_chars)
-      return string.substring(0, number_of_chars) + '...';
-   else
-      return string;
+.subtext-right {
+ font-size: 10px;
+ color:grey;
+ padding-right: 50px;
+ text-align: right;
 }
 
-
-
-
-
-
-// Get the modal
-var modal = document.getElementById('myModal');
-
-// Get the button that opens the modal
-var btn = document.getElementById("settings");
-
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
-
-// When the user clicks on the button, open the modal
-btn.onclick = function() {
-  modal.style.display = "block";
+.timestamp {
+    display:none
 }
-
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-  modal.style.display = "none";
-}
-
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
-
-function hideModal() {
-  document.getElementById("myModal").style.display = "none";
-}
-
-
-
-
-
-
-$(document).ready(function() {
-	$('#settings_submit').one('click', function(e) {
-
-        var name = $('#name').val();
-        var host = $('#host').val();
-        var port = $('#port').val();
-        var chat_port = $('#chat_port').val();
-
-        req = $.ajax({
-            url : '/connect_to_mms',
-            type : 'POST',
-            data : { name : name, host : host, port : port, chat_port : chat_port }
-        });
-
-        req.done(function(data) {
-            if (data.status == "Successfully connected!") {
-                $('#success_connection_message').fadeIn(1000).fadeOut(5000);
-                if (document.getElementById("people_in_group").value) {
-                    var group_text = truncate(document.getElementById("chat_port").value + ", " +
-                                              document.getElementById("name").value + ", " +
-                                              document.getElementById("people_in_group").value)
-                                  }
-                else {
-                    var group_text = truncate(document.getElementById("chat_port").value + ", " +
-                                              document.getElementById("name").value)
-                }
-
-                setText("group_name", data.group_name)
-                setText("screen_name", document.getElementById("name").value)
-            }
-            else {
-                $('#fail_connection_message').fadeIn(1000).fadeOut(5000);
-            }
-        });
-    });
-
-
-
-    $('#exit_room').one('click', function() {
-        req = $.ajax({
-            url : '/exit_room',
-            type : 'POST',
-            <!--data : { name : name, host : host, port : port, chat_port : chat_port }-->
-        });
-
-        req.done(function(data) {
-            if (data.status == "Successfully disconnected!") {
-                $('#success_disconnection_message').fadeIn(1000).fadeOut(5000);
-
-                setText("group_name", "Disconnected")
-                setText("screen_name", "Anonymous")
-            }
-            else {
-                $('#fail_disconnection_message').fadeIn(1000).fadeOut(5000);
-            }
-        });
-    });
-
-
-
-});
-</script>
-</body></html>

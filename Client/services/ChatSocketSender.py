@@ -1,7 +1,7 @@
-from Client.src.backend.ChatSocket import ChatSocket
-from Client.src.backend.ChatSocketListener import ChatSocketListener
+from Client.services.ChatSocket import ChatSocket
+from Client.services.ChatSocketListener import ChatSocketListener
 from datetime import datetime
-import Client.src.backend.GlobalVars as GlobalVars
+import Client.services.GlobalVars as GlobalVars
 
 class ChatSocketSender(ChatSocket):
     """
@@ -16,6 +16,18 @@ class ChatSocketSender(ChatSocket):
         self.chat_port = ""
         self.own_ip = own_ip
         self.open_socket = None
+
+    def get_group_name(self):
+        users = list(self.hosts.keys())
+        users.remove(self.screen_name)
+
+        if (len(users) == 0):
+            return self.chat_port + ": " + \
+                   self.screen_name
+        else:
+            return self.chat_port + ": " + \
+                   self.screen_name + ", " + \
+                   ", ".join(users)
 
     def send_message_to_room(self, message):
         message = "MESG " + self.screen_name + ": " + message + "\n"

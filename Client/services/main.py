@@ -3,9 +3,9 @@ import logging
 import coloredlogs
 import webview
 from time import sleep
-from Client.src.backend.client import run_client
+from Client.services.client import run_client
 from http.client import HTTPConnection
-import Client.src.backend.GlobalVars as GlobalVars
+import Client.services.GlobalVars as GlobalVars
 
 server_lock = Lock()
 # logging.basicConfig(filename="test.log", level=logging.DEBUG)
