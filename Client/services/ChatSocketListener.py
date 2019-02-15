@@ -2,7 +2,6 @@ from Client.services.ChatSocket import ChatSocket
 import threading
 import socket
 import Client.services.GlobalVars as GlobalVars
-from flask_socketio import emit
 from datetime import datetime
 
 
@@ -12,9 +11,9 @@ class ChatSocketListener(ChatSocket):
     and the Membership Server.
     """
 
-    def __init__(self, host_ip="127.0.0.1", host_port="27070"):
-        self.host_ip = host_ip
-        self.host_port = host_port
+    def __init__(self, local_ip="127.0.0.1", listener_port="27070"):
+        self.local_ip = local_ip
+        self.listener_port = listener_port
         self.chat_socket_listener = threading.Thread(target=self.listen_over_udp)
         self.chat_socket_listener.start()
         return
@@ -29,7 +28,8 @@ class ChatSocketListener(ChatSocket):
         """
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            sock.bind((self.host_ip, int(self.host_port)))
+            server_address = (self.local_ip, int(self.listener_port))
+            sock.bind(server_address)
 
             while True:
                 msg, addr = sock.recvfrom(1024)
@@ -44,7 +44,7 @@ class ChatSocketListener(ChatSocket):
                 else:
                     GlobalVars.LOGGER.warning("(" + str(datetime.now()) + ") UNKNOWN MESSAGE: " + msg)
         except:
-            GlobalVars.LOGGER.exception("(" + str(datetime.now()) + ") FAILED TO CLAIM PORT " + self.host_port + "!")
+            GlobalVars.LOGGER.exception("(" + str(datetime.now()) + ") FAILED TO CLAIM PORT " + self.listener_port + "!")
 
     def recieve_message_from_room(self, msg):
         sender = msg[0]
@@ -68,6 +68,7 @@ class ChatSocketListener(ChatSocket):
         user_str = next(iter(new_user))
         if (user_str.lower() != GlobalVars.CHAT_SOCKET_SENDER.screen_name.lower):
             GlobalVars.CHAT_SOCKET_SENDER.hosts = {**GlobalVars.CHAT_SOCKET_SENDER.hosts, **new_user}
+            ChatSocketListener(new_user[user_str][0], new_user[user_str][1])
             GlobalVars.LOGGER.debug("(" + str(datetime.now()) + ") PROCESSED USER JOIN: " + user_str +
                                     " AT IP: " + new_user[user_str][0] + " " + new_user[user_str][1])
 

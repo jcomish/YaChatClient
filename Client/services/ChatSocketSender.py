@@ -2,6 +2,7 @@ from Client.services.ChatSocket import ChatSocket
 from Client.services.ChatSocketListener import ChatSocketListener
 from datetime import datetime
 import Client.services.GlobalVars as GlobalVars
+import socket
 
 class ChatSocketSender(ChatSocket):
     """
@@ -14,6 +15,7 @@ class ChatSocketSender(ChatSocket):
         self.host_ip = ""
         self.host_port = ""
         self.chat_port = ""
+        self.local_ip = socket.gethostbyname(socket.gethostname())
         self.own_ip = own_ip
         self.open_socket = None
 
@@ -43,7 +45,6 @@ class ChatSocketSender(ChatSocket):
         """
         del self.hosts[self.screen_name]
         self.send_msg_over_tcp("EXIT\n")
-        # GlobalVars.LOGGER.ChatSocketListener
         GlobalVars.LOGGER.debug("(" + str(datetime.now()) + ") SENT EXIT MESSAGE")
 
     def parse_users(self, msg: str):
@@ -73,14 +74,15 @@ class ChatSocketSender(ChatSocket):
         try:
             self.screen_name = name
             self.host_ip = host
-            self.host_port = str(port)
+            self.host_port = port
+
             self.chat_port = str(chat_port)
 
             GlobalVars.LOGGER.debug("(" + str(datetime.now()) + ")" + " ATTEMPTING CONNECTION TO " +
                                     self.host_ip + " " + self.host_port)
 
             self.establish_tcp_socket()
-            self.send_msg_over_tcp("HELO " + self.screen_name + " " + self.host_ip + " " + self.chat_port + "\n")
+            self.send_msg_over_tcp("HELO " + self.screen_name + " " + self.local_ip + " " + self.chat_port + "\n")
             msg = self.recv_msg_over_tcp()
 
             # Process the message
@@ -95,9 +97,11 @@ class ChatSocketSender(ChatSocket):
             GlobalVars.LOGGER.debug("(" + str(datetime.now()) + ")" + " SUCCESSFUL CHATTER CREATION AT PORT " +
                                     self.chat_port)
 
-            GlobalVars.LOGGER.debug("(" + str(datetime.now()) + ")" + " STARTING LISTENER...")
+            GlobalVars.LOGGER.debug("(" + str(datetime.now()) + ")" + " STARTING LISTENERS...")
+
             # Start up the listener!
-            ChatSocketListener(self.own_ip, self.chat_port)
+            ChatSocketListener(self.local_ip, self.chat_port)
+
             GlobalVars.LOGGER.debug("(" + str(datetime.now()) + ")" + " SUCCESSFULLY STARTED LISTENER AT " +
                                     self.own_ip + " " + self.chat_port)
             return users
