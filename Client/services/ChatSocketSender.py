@@ -75,7 +75,6 @@ class ChatSocketSender(ChatSocket):
             self.screen_name = name
             self.host_ip = host
             self.host_port = port
-
             self.chat_port = str(chat_port)
 
             GlobalVars.LOGGER.debug("(" + str(datetime.now()) + ")" + " ATTEMPTING CONNECTION TO " +

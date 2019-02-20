@@ -32,6 +32,11 @@ $("#status-options ul li").click(function() {
 	$("#status-options").removeClass("active");
 });
 
+function updateScroll(){
+    var element = document.getElementById("ul");
+    element.scrollTop = element.scrollHeight + 1000000;
+}
+
 //NOTE: Update this to send a message to everyone else in the chat room using a backend function.
 function newMessage() {
 	message = $(".message-input input").val();
@@ -56,6 +61,7 @@ function newMessage() {
 	$('.message-input input').val(null);
 	$('.contact.active .preview').html('<span>You: </span>' + message);
 	$(".messages").animate({ scrollTop: $(document).height() }, "fast");
+    updateScroll();
 };
 
 //NOTE: Update this to send a message to everyone else in the chat room using a backend function.
@@ -68,9 +74,9 @@ function recvMessage(message) {
 	'<p class="subtext-right">' + String(message.user) +'</p>' +
 	'<p class="subtext-right">' + String(message.timestamp) + '</p>' +
 	'</div>').appendTo($('.messages ul'));
-	$('.message-input input').val(null);
 	$('.contact.active .preview').html('<span>You: </span>' + message.message);
 	$(".messages").animate({ scrollTop: $(document).height() }, "fast");
+    updateScroll();
 };
 
 function systemMessage(message) {
@@ -78,6 +84,7 @@ function systemMessage(message) {
 	$('.message-input input').val(null);
 	$('.contact.active .preview').html('<span>You: </span>' + message.message);
 	$(".messages").animate({ scrollTop: $(document).height() }, "fast");
+    updateScroll();
 }
 
 (function(w, d){
@@ -292,6 +299,10 @@ $(document).ready(function() {
                 $('#fail_disconnection_message').fadeIn(1000).fadeOut(5000);
             }
         });
+    });
+
+    $('#clear_button').on('click', function() {
+        $("messages").empty();
     });
 
     function send_message_to_group() {

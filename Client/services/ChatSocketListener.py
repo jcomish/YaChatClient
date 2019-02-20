@@ -68,7 +68,6 @@ class ChatSocketListener(ChatSocket):
         user_str = next(iter(new_user))
         if (user_str.lower() != GlobalVars.CHAT_SOCKET_SENDER.screen_name.lower):
             GlobalVars.CHAT_SOCKET_SENDER.hosts = {**GlobalVars.CHAT_SOCKET_SENDER.hosts, **new_user}
-            ChatSocketListener(new_user[user_str][0], new_user[user_str][1])
             GlobalVars.LOGGER.debug("(" + str(datetime.now()) + ") PROCESSED USER JOIN: " + user_str +
                                     " AT IP: " + new_user[user_str][0] + " " + new_user[user_str][1])
 
